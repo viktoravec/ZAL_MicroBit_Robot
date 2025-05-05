@@ -1,59 +1,49 @@
 let maxFrequency: number = 83
 let minFrequency: number = 1
-let frequency = minFrequency
-let ready: boolean = false
-radio.on()
-radio.setGroup(frequency)
+let ready : boolean = false
 
-input.onButtonPressed(Button.AB, function () {
-    music.playTone(300, 500)
-    basic.showNumber(3)
-    basic.pause(50);
-    music.playTone(300, 500)
-    basic.showNumber(2)
-    basic.pause(50);
-    music.playTone(300, 500)
-    basic.showNumber(1)
-    basic.pause(50);
-    basic.showLeds(`
-    . . # . .
-    . # # # .
-    # . # . #
-    . . # . .
-    . . # . .
-    `)
-    music.playTone(600, 700)
-    basic.clearScreen()
-radio.sendString("start")
-console.log("started")
-ready = true
+radio.on();
+radio.setGroup(minFrequency);
+
+input.onButtonPressed(Button.AB, function() {
+    music.playTone(300, 500);
+    basic.showNumber(3);
+    basic.pause(500);
+    music.playTone(300, 500);
+    basic.showNumber(2);
+    basic.pause(500);
+    music.playTone(300, 500);
+    basic.showNumber(1);
+    basic.pause(500);
+
+    basic.showIcon(IconNames.Target);
+    music.playTone(600, 700);
+    basic.clearScreen();
+
+    radio.sendString("start");
+    ready = true;
 })
 
-radio.onReceivedString(function (recievedString) {
-    if (recievedString = "start") {  
- 
+radio.onReceivedString(function (recivedString: string){
+    if(recivedString === "start"){
+        ready = true
+    }
+})
+
 basic.forever(function(){
-    if(ready = true){
-    for (let i = minFrequency; i <= maxFrequency; i++) {
-        frequency++;
-        radio.setGroup(frequency);
-        basic.pause(25);
-        console.log(frequency)
-    }
+    if(ready){
+        for(let i = minFrequency; i <= maxFrequency; i++){
+            radio.setGroup(i);
+            console.logValue("Frequency = ", i);
+            basic.pause(100)
+        }
 
-    for (let i = maxFrequency; i >= minFrequency; i--) {
-        frequency--;
-        radio.setGroup(frequency);
-        basic.pause(25);
-        console.log(frequency)
+        for(let i = maxFrequency; i >= minFrequency; i--){
+            radio.setGroup(i);
+            console.logValue("Frequency = ", i);
+            basic.pause(100);
+        }
     }
-}
 })
 
-}
-})
-   
-   
-let x: number = input.acceleration(Dimension.X)
-let y: number = input.acceleration(Dimension.Y)
-let z: number = input.acceleration(Dimension.Z)
+
